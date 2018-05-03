@@ -19,4 +19,6 @@
     <string name="listado_reservados">Horarios Reservados a la fecha</string>
     <string name="historico">Historico</string>
     <string name="borrar_todos">Borrar todos</string>
+    <string name="no_se_encuentran_reservas_a_la_fecha">No se encuentran reservas a la fecha.</string>
+    <string name="reservado_a">Reservado a</string>
 </resources>

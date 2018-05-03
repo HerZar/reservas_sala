@@ -1,9 +1,11 @@
 package ar.com.eduit.utils;
 
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -16,6 +18,7 @@ public class ReservaAdapter extends BaseAdapter {
 
 
     private List<Reserva> reservas;
+    private LinearLayout llmainl;
 
     public ReservaAdapter(List<Reserva> reservas) {
         this.reservas = reservas;
@@ -58,6 +61,8 @@ public class ReservaAdapter extends BaseAdapter {
         TextView twFecha = (TextView) view.findViewById(R.id.twFecha);
         TextView twHorario = (TextView) view.findViewById(R.id.twHorario);
         TextView twHorarioFin = (TextView) view.findViewById(R.id.twHorarioFin);
+
+        llmainl = (LinearLayout) view.findViewById(R.id.mainLayout);
 
         //Cargo Nombre al cual esta asignada la reserva al view.
         twNombre.setText("Reservado a " + reserva.getNombre());
@@ -114,6 +119,12 @@ public class ReservaAdapter extends BaseAdapter {
         minAux = minAux + reserva.getFin().get(Calendar.MINUTE);
         hora = hourAux + ":" + minAux;
         twHorarioFin.setText(" a " + hora);
+
+        Calendar aux;
+        aux = Calendar.getInstance();
+        if (UtilCalendar.compareDateTo(aux,reserva.getInicio())==0){
+            llmainl.setBackgroundColor(ContextCompat.getColor(parent.getContext(),R.color.fondo_reservas_dia));
+        }
 
         return view;
     }

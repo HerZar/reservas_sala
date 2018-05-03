@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:background="@color/fondo_aplicacion"
     android:layout_marginBottom="3dp"
+    android:id="@+id/mainLayout"
     >
 
     <TextView

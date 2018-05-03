@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import ar.com.eduit.utils.ReservaAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView tvEmptyMesage;
     private ListView lwReservas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         lwReservas = (ListView) findViewById(R.id.lvListaReservas);
-
+        tvEmptyMesage = (TextView) findViewById(R.id.tvEmptyMesage);
     }
 
     @Override
@@ -59,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
             });
+            if (resAdapter.getCount()>0){
+                tvEmptyMesage.setVisibility(View.GONE);
+            }
 
 
 

@@ -30,6 +30,16 @@
         app:backgroundTint="#CCFFCC"
         app:srcCompat="@drawable/ic_add" />
 
+    <TextView
+        android:id="@+id/tvEmptyMesage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_se_encuentran_reservas_a_la_fecha"
+        android:textColor="@color/item_text_color"
+        android:textColorHint="@color/text_hint_color"
+        android:paddingTop="100sp"
+        android:gravity="center"/>
+
     <ListView
         android:id="@+id/lvListaReservas"
         android:layout_width="match_parent"
