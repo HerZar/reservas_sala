@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/fondo_aplicacion"
+    tools:context="ar.com.eduit.reservassala.AgregarReserva">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nueva_reserva"
+        android:textSize="@dimen/dim_text_item"
+        android:textColor="@color/item_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvID"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        />
+
+
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/a_nombre_de"
+        android:inputType="text"
+        android:textSize="@dimen/dim_text_item"
+        android:textColor="@color/item_text_color"
+        android:textColorHint="@color/text_hint_color"
+        android:maxLines="1" />
+
+
+    <EditText
+        android:id="@+id/etFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="@string/seleccionar_fecha"
+        android:inputType="date"
+        android:maxLines="1"
+        android:textSize="@dimen/dim_text_item"
+        android:textColor="@color/item_text_color"
+        android:textColorHint="@color/text_hint_color"
+        android:onClick="etFechaClick" />
+
+    <EditText
+        android:id="@+id/etHora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="@string/seleccionar_horaIni"
+        android:inputType="time"
+        android:maxLines="1"
+        android:textSize="@dimen/dim_text_item"
+        android:textColor="@color/item_text_color"
+        android:textColorHint="@color/text_hint_color"
+        android:onClick="etHoraClick" />
+
+    <EditText
+        android:id="@+id/etHoraFin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="@string/seleccionar_horaFin"
+        android:inputType="time"
+        android:maxLines="1"
+        android:textSize="@dimen/dim_text_item"
+        android:textColor="@color/item_text_color"
+        android:textColorHint="@color/text_hint_color"
+        android:onClick="etHoraClickFin" />
+
+    <CheckBox
+        android:id="@+id/cbFijo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:checked="false"
+        android:textSize="@dimen/dim_text_item"
+        android:textColor="@color/item_text_color"
+        android:text="@string/fijo" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="guardarReserva"
+        android:text="@string/guardar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lista_reservados">
+
+        <LinearLayout
+            android:id="@+id/llReservados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listado_reservados"
+                android:textSize="@dimen/dim_text_item"
+                android:textColor="@color/item_text_color"/>
+
+            <ListView
+
+                android:id="@+id/lvListaReservas"
+                android:layout_width="match_parent"
+                android:layout_height="204dp"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
