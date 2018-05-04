@@ -120,9 +120,7 @@ public class ReservaAdapter extends BaseAdapter {
         hora = hourAux + ":" + minAux;
         twHorarioFin.setText(" a " + hora);
 
-        Calendar aux;
-        aux = Calendar.getInstance();
-        if (UtilCalendar.compareDateTo(aux,reserva.getInicio())==0){
+        if (reserva.isForToday()){
             llmainl.setBackgroundColor(ContextCompat.getColor(parent.getContext(),R.color.fondo_reservas_dia));
         }
 

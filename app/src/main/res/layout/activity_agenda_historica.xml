@@ -27,7 +27,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:divider="@color/divisor_lista_reservas"
+                android:dividerHeight="1sp"/>
 
             <Button
                 android:layout_width="match_parent"

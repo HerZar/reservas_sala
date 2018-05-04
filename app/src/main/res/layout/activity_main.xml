@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="#CCFFCC"
+        app:backgroundTint="@color/fordo_boton_add"
         app:srcCompat="@drawable/ic_add" />
 
     <TextView
@@ -45,7 +45,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="45sp" />
+        android:paddingTop="45sp"
+        android:divider="@color/divisor_lista_reservas"
+        android:dividerHeight="1sp"
+        />
 
 
 </android.support.design.widget.CoordinatorLayout>

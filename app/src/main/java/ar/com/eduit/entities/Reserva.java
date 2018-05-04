@@ -177,4 +177,24 @@ public class Reserva implements Comparable<Reserva> {
     }
 
 
+    public boolean isForToday(){
+
+        boolean isToday = false;
+        Calendar today = Calendar.getInstance();
+
+        if (this.isFijo()){
+            if ((this.getInicio().get(Calendar.DAY_OF_WEEK) ==
+                    today.get(Calendar.DAY_OF_WEEK)) &&
+                    (UtilCalendar.compareDateTo(this.getInicio(),today) <= 0)){
+                isToday=true;
+            }
+        }else{
+            if (UtilCalendar.compareDateTo(this.getInicio(),today) == 0){
+                isToday = true;
+            }
+        }
+
+        return isToday;
+    }
+
 }

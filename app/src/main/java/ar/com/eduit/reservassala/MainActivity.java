@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
        //     listRes = getPosteriores(listRes);
             final ReservaAdapter resAdapter = new ReservaAdapter(listRes);
             lwReservas.setAdapter(resAdapter);
+
             lwReservas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     return false;
                 }
-            });
+            });  
             if (resAdapter.getCount()>0){
                 tvEmptyMesage.setVisibility(View.GONE);
             }
