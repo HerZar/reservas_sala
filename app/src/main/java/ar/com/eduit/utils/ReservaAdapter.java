@@ -65,7 +65,8 @@ public class ReservaAdapter extends BaseAdapter {
         llmainl = (LinearLayout) view.findViewById(R.id.mainLayout);
 
         //Cargo Nombre al cual esta asignada la reserva al view.
-        twNombre.setText("Reservado a " + reserva.getNombre());
+        //twNombre.setText(Resources.getSystem().getString(R.string.reservado_a) + reserva.getNombre());
+        twNombre.setText(parent.getContext().getString(R.string.reservado_a) +" "+ reserva.getNombre());
 
         //Cargo Fecha de la reserva al view.
         if (reserva.getInicio().get(Calendar.DAY_OF_MONTH) < 10) {
@@ -83,11 +84,11 @@ public class ReservaAdapter extends BaseAdapter {
         yearAux = yearAux + reserva.getInicio().get(Calendar.YEAR);
         String Fecha = "";
         if (reserva.isFijo()) {
-            Fecha = "Fijo los " + UtilCalendar.getDiaSemana(reserva.getInicio().get(Calendar.DAY_OF_WEEK) - 1) +
-                    " a partir del " + dayAux + "/" + monthAux + "/" + yearAux;
+            Fecha = parent.getContext().getString(R.string.fijo_los)  +" "+ UtilCalendar.getDiaSemana(parent.getContext(),reserva.getInicio().get(Calendar.DAY_OF_WEEK) - 1) +
+                    " "+ parent.getContext().getString(R.string.a_partir_del)  + " " + dayAux + "/" + monthAux + "/" + yearAux;
         } else {
             Fecha = dayAux + "/" + monthAux + "/" + yearAux
-                    + " " + UtilCalendar.getDiaSemana(reserva.getInicio().get(Calendar.DAY_OF_WEEK) - 1);
+                    + " " + UtilCalendar.getDiaSemana(parent.getContext(),reserva.getInicio().get(Calendar.DAY_OF_WEEK) - 1);
         }
 
         twFecha.setText(Fecha);
@@ -104,7 +105,7 @@ public class ReservaAdapter extends BaseAdapter {
         }
         minAux = minAux + reserva.getInicio().get(Calendar.MINUTE);
         String hora = hourAux + ":" + minAux;
-        twHorario.setText("De " + hora);
+        twHorario.setText(parent.getContext().getString(R.string.de_desde)  +" "+ hora);
 
         //Cargo horario de fin de reserva al view.
         hourAux = "";
@@ -118,7 +119,7 @@ public class ReservaAdapter extends BaseAdapter {
         }
         minAux = minAux + reserva.getFin().get(Calendar.MINUTE);
         hora = hourAux + ":" + minAux;
-        twHorarioFin.setText(" a " + hora);
+        twHorarioFin.setText( " "+ parent.getContext().getString(R.string.a_hasta)  +" "+ hora);
 
         if (reserva.isForToday()){
             llmainl.setBackgroundColor(ContextCompat.getColor(parent.getContext(),R.color.fondo_reservas_dia));

@@ -46,7 +46,7 @@ public class AgendaResHist extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error Al cargar Agenda.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.Error_de_Carga_agenda) , Toast.LENGTH_SHORT).show();
         }
 
         super.onResume();
@@ -55,9 +55,9 @@ public class AgendaResHist extends AppCompatActivity {
     public void borrarTodos(View view) {
         try {
             RepoReserva.getInstance(getApplicationContext()).deleteReservasViejas();
-            Toast.makeText(getApplicationContext(), "Registros historicos borrados.", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.Historicos_borrados), Toast.LENGTH_LONG);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error al borrar los registros historicos.", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(),getApplicationContext().getString(R.string.error_borrar_historicos), Toast.LENGTH_LONG);
         }
         try {
             List<Reserva> listRes = RepoReserva.getInstance(getApplicationContext())
@@ -65,7 +65,7 @@ public class AgendaResHist extends AppCompatActivity {
             final ReservaAdapter resAdapter = new ReservaAdapter(listRes);
             lwReservas.setAdapter(resAdapter);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error Al cargar Agenda.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),getApplicationContext().getString(R.string.Error_de_Carga_agenda), Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -95,7 +95,7 @@ public class AgregarReserva extends AppCompatActivity {
             }
             yearAux = yearAux + reserva.getInicio().get(Calendar.YEAR);
             String Fecha = dayAux + "/" + monthAux + "/" + yearAux
-                    + " " + UtilCalendar.getDiaSemana(reserva.getInicio().get(Calendar.DAY_OF_WEEK) - 1);
+                    + " " + UtilCalendar.getDiaSemana(getApplicationContext(),reserva.getInicio().get(Calendar.DAY_OF_WEEK) - 1);
 
 
             fechaEt.setText(Fecha);
@@ -180,7 +180,7 @@ public class AgregarReserva extends AppCompatActivity {
                         }
                         yearAux = yearAux + year;
                         final String selectedDate = dayAux + "/" + monthAux + "/" + yearAux
-                                + " " + UtilCalendar.getDiaSemana(auxFecha.get(Calendar.DAY_OF_WEEK) - 1);
+                                + " " + UtilCalendar.getDiaSemana(getApplicationContext(),auxFecha.get(Calendar.DAY_OF_WEEK) - 1);
 
                         fechaEt.setText(selectedDate);
                     }
@@ -269,14 +269,14 @@ public class AgregarReserva extends AppCompatActivity {
 
             if (res.getInicio().compareTo(Calendar.getInstance()) >= 0) {
                 if (res.getFin().compareTo(res.getInicio()) < 0) {
-                    Toast.makeText(getApplicationContext(), "El Horario de fin no puede ser anterior al inicio.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.validacion_horas_invertidas), Toast.LENGTH_LONG).show();
                 } else {
                     if (!idTv.getText().toString().isEmpty()) {
                         res.setId(Long.parseLong(idTv.getText().toString()));
                     }
                     boolean aux = estaSuperpuesto(res);
                     if (aux) {
-                        Toast.makeText(getApplicationContext(), "La reserva se superpone con otra reserva guardada.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.validacion_reservas_superpuestas), Toast.LENGTH_LONG).show();
                         mostrarReservas(res);
                     } else {
                         try {
@@ -287,13 +287,13 @@ public class AgregarReserva extends AppCompatActivity {
                             }
                             onBackPressed();
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "Error al guardar la reserva.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.error_al_guardar_reserva), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "No es posible reservar con fecha anterior al corriente.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.validacion_fecha_pasada), Toast.LENGTH_LONG).show();
             }
         }
 
@@ -323,7 +323,7 @@ public class AgregarReserva extends AppCompatActivity {
             lvListaReservas.setAdapter(resAdapter);
             llReservados.setVisibility(View.VISIBLE);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error al cargar Reservas", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.error_carga_vistas_reserva), Toast.LENGTH_SHORT);
         }
     }
 
@@ -346,7 +346,7 @@ public class AgregarReserva extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(this.getApplicationContext(), "fallo aca", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.Error_de_Carga_agenda), Toast.LENGTH_SHORT).show();
         }
         return resultado;
 
@@ -358,8 +358,7 @@ public class AgregarReserva extends AppCompatActivity {
                 || fechaEt.getText().toString().isEmpty()
                 || horaEt.getText().toString().isEmpty()
                 || horaEtFin.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Los Campos Nombre, Fecha, " +
-                    "Hora Inicio y Hora fin, son obligatorios.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.validacion_campos_vacios), Toast.LENGTH_LONG).show();
             respuesta = false;
         }
         return respuesta;

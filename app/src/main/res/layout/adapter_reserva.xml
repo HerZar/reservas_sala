@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/fondo_aplicacion"
     android:layout_marginBottom="3dp"
     android:id="@+id/mainLayout"
     >
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/dim_text_item"
         android:textColor="@color/item_text_color"
-        android:text="PRUEBA"
+        android:text="@string/prueba"
         />
 
     <TextView
@@ -23,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/item_text_color"
         android:textSize="@dimen/dim_text_item"
-        android:text="PRUEBA"
+        android:text="@string/prueba"
         />
 
     <LinearLayout
@@ -39,7 +38,7 @@
             android:layout_weight="1"
             android:textColor="@color/item_text_color"
             android:textSize="@dimen/dim_text_item"
-            android:text="PRUEBA"
+            android:text="@string/prueba"
         />
 
         <TextView
@@ -49,7 +48,7 @@
             android:layout_weight="1"
             android:textColor="@color/item_text_color"
             android:textSize="@dimen/dim_text_item"
-            android:text="PRUEBA"
+            android:text="@string/prueba"
         />
     </LinearLayout>
 
