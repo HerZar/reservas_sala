@@ -120,8 +120,10 @@
 
                 android:id="@+id/lvListaReservas"
                 android:layout_width="match_parent"
-                android:layout_height="204dp"
-                android:orientation="vertical" />
+                android:layout_height="220dp"
+                android:orientation="vertical"
+                android:divider="@color/divisor_lista_reservas"
+                android:dividerHeight="1sp"/>
         </LinearLayout>
 
     </ScrollView>

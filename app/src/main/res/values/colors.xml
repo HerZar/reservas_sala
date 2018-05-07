@@ -7,4 +7,8 @@
     <color name="item_text_color">#FFFFFF</color>
     <color name="text_hint_color">#AFADAD</color>
     <color name="fondo_reservas_dia">#D11D1D</color>
+    <color name="fordo_boton_add">#D11D1D</color>
+    <color name="divisor_lista_reservas">#040404</color>
+    <color name="negro">#040404</color>
+    <color name="Blanco">#FFFFFF</color>
 </resources>

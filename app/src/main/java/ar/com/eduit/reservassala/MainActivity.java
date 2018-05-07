@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
        //     listRes = getPosteriores(listRes);
             final ReservaAdapter resAdapter = new ReservaAdapter(listRes);
             lwReservas.setAdapter(resAdapter);
+
             lwReservas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     return false;
                 }
-            });
+            });  
             if (resAdapter.getCount()>0){
                 tvEmptyMesage.setVisibility(View.GONE);
             }
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         }catch(Exception e){
-            Toast.makeText(getApplicationContext(), "Error Al cargar Agenda.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.Error_de_Carga_agenda), Toast.LENGTH_SHORT).show();
         }
 
         super.onResume();

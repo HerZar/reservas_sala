@@ -1,11 +1,16 @@
 package ar.com.eduit.utils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import ar.com.eduit.reservassala.R;
 
 public class UtilCalendar {
-
+/*
     private static final String[] strDays = new String[]{
             "Domingo",
             "Lunes",
@@ -14,13 +19,24 @@ public class UtilCalendar {
             "Jueves",
             "Viernes",
             "Sabado"};
-
+*/
     /**
      *  Este metodo recibe un int de 0 a 6 y devuelve el dia de la semana para ese int
      *  0 = Domingo en adelante.
      * */
-    public static String getDiaSemana (int dia){
-            return strDays[dia];
+    public static String getDiaSemana (Context context , int dia){
+
+        List<String> strDays = new ArrayList<>();
+        strDays.add(context.getString(R.string.Domingo));
+        strDays.add(context.getString(R.string.Lunes));
+        strDays.add(context.getString(R.string.Martes));
+        strDays.add(context.getString(R.string.Miercoles));
+        strDays.add(context.getString(R.string.Jueves));
+        strDays.add(context.getString(R.string.Viernes));
+        strDays.add(context.getString(R.string.Sabado));
+
+
+        return strDays.get(dia);
     }
 
     /**
@@ -47,6 +63,10 @@ public class UtilCalendar {
         return calendario;
     }
 
+    /**
+     * Este metodo compara dos calendar unicamente por la fecha sin importar
+     * la hora que tengan cargada.
+     **/
     @SuppressLint("WrongConstant")
     public static int compareDateTo (Calendar a, Calendar b){
         Calendar esteDia = Calendar.getInstance();
@@ -69,6 +89,12 @@ public class UtilCalendar {
 
         return esteDia.compareTo(elOtro);
     }
+
+    /**
+     * Este metodo compara dos calendar por fecha hora, sin contar
+     * los segundos y milisegundos
+     *
+     **/
     public static int compareHourTo(Calendar a, Calendar b) {
         Calendar esteDia = Calendar.getInstance();
         Calendar elOtro = Calendar.getInstance();
