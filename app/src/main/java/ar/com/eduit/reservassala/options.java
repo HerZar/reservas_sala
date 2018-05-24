@@ -28,9 +28,9 @@ public class options extends AppCompatActivity {
     public void eliminarReserva(View view) {
         try{
             RepoReserva.getInstance(getApplicationContext()).deleteReservaById(itemID);
-            Toast.makeText(this.getApplicationContext(),"La reserva a sido eliminada",Toast.LENGTH_SHORT);
+            Toast.makeText(this.getApplicationContext(),this.getApplicationContext().getResources().getString(R.string.la_reserva_ha_sido_eliminada),Toast.LENGTH_SHORT);
         }catch (Exception e){
-            Toast.makeText(this.getApplicationContext(),"Error Al borrar el registro.",Toast.LENGTH_LONG);
+            Toast.makeText(this.getApplicationContext(),this.getApplicationContext().getResources().getString(R.string.error_al_borrar_el_registro),Toast.LENGTH_LONG);
         }
 
         onBackPressed();

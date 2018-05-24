@@ -24,16 +24,20 @@ public class Reserva implements Comparable<Reserva> {
     private Date fin;
     @DatabaseField
     private boolean fijo = false;
+    //Forein key ODeAlquiler
+    @DatabaseField
+    private long odalquilerID;
 
     public Reserva() {
 
     }
 
-    public Reserva(String nombre, Calendar inicio, Calendar fin, boolean fijo) {
+    public Reserva(String nombre, Date inicio, Date fin, boolean fijo, long odalquilerID) {
         Nombre = nombre;
-        this.inicio = inicio.getTime();
-        this.fin = fin.getTime();
+        this.inicio = inicio;
+        this.fin = fin;
         this.fijo = fijo;
+        this.odalquilerID = odalquilerID;
     }
 
     public long getId() {
@@ -80,46 +84,64 @@ public class Reserva implements Comparable<Reserva> {
         this.fijo = fijo;
     }
 
+    public long getOdalquilerID() {
+        return odalquilerID;
+    }
+
+    public void setOdalquilerID(long odalquilerID) {
+        this.odalquilerID = odalquilerID;
+    }
+
     /**
-     *  este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor, y 2 si es el mismo objeto.
+     *  este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor,
+     *  2 si es el mismo objeto, 3 si no pertenese al mismo objeto de alquiler.
      * */
     @Override
     public int compareTo(@NonNull Reserva o) {
         int retorno = 0;
-        if (this.getId() == o.getId()){
-            retorno = 2;
+
+        // compruebo si pertenece al mismo objeto de alquiler.
+        if (this.getOdalquilerID() != o.getOdalquilerID()){
+            retorno = 3;
         }
         else {
-            if (!this.isFijo() && !o.isFijo()) {
-                if (this.inicio.compareTo(o.fin) >= 0) {
-
-                    retorno = 1;
-                } else {
-                    if (this.fin.compareTo(o.inicio) <= 0) {
-                        retorno = -1;
-                    } else {
-                        retorno = 0;
-                    }
-                }
+            //Compruebo si el objeto es si mismo.
+            if (this.getId() == o.getId()) {
+                retorno = 2;
             } else {
-                //Compruebo dia
-                if (this.getInicio().get(Calendar.DAY_OF_WEEK) == o.getInicio().get(Calendar.DAY_OF_WEEK)) {
-                    //is el dia es el mismo comparo horas.
-                    if (UtilCalendar.compareHourTo(this.getInicio(), o.getFin()) >= 0) {
+                //Compruebo si ninguna de las reservas es fija coparo unicamente las fechas
+                if (!this.isFijo() && !o.isFijo()) {
+                    if (this.inicio.compareTo(o.fin) >= 0) {
+
                         retorno = 1;
                     } else {
-                        //if (this.fin.compareTo(o.inicio) <= 0) {
-                        if (UtilCalendar.compareHourTo(this.getFin(), o.getInicio()) <= 0) {
+                        if (this.fin.compareTo(o.inicio) <= 0) {
                             retorno = -1;
                         } else {
                             retorno = 0;
                         }
                     }
                 } else {
-                    if (this.getInicio().get(Calendar.DAY_OF_WEEK) < o.getInicio().get(Calendar.DAY_OF_WEEK)) {
-                        retorno = -1;
+                    //si alguna de las dos respervas es fija, comparo dia de la semana y hora.
+                    //Compruebo dia
+                    if (this.getInicio().get(Calendar.DAY_OF_WEEK) == o.getInicio().get(Calendar.DAY_OF_WEEK)) {
+                        //is el dia es el mismo comparo horas.
+                        if (UtilCalendar.compareHourTo(this.getInicio(), o.getFin()) >= 0) {
+                            retorno = 1;
+                        } else {
+                            //if (this.fin.compareTo(o.inicio) <= 0) {
+                            if (UtilCalendar.compareHourTo(this.getFin(), o.getInicio()) <= 0) {
+                                retorno = -1;
+                            } else {
+                                retorno = 0;
+                            }
+                        }
                     } else {
-                        retorno = 1;
+                        if (this.getInicio().get(Calendar.DAY_OF_WEEK) < o.getInicio().get(Calendar.DAY_OF_WEEK)) {
+                            retorno = -1;
+                        } else {
+                            retorno = 1;
+                        }
                     }
                 }
             }
@@ -128,46 +150,36 @@ public class Reserva implements Comparable<Reserva> {
     }
 
     /**
-     *  este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor, y 2 si es el mismo objeto.
+     *  este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor,
+     *  2 si es el mismo objeto, 3 si no pertenece al mismo objeto de alquiler.
      * */
     @SuppressLint("WrongConstant")
     public int compareDayTo(Reserva o) {
         int respuesta = 0;
-        if (this.getId() == o.getId()){
-            respuesta = 2;
+        // compruebo si pertenece al mismo objeto de alquiler.
+        if (this.getOdalquilerID() != o.getOdalquilerID()){
+            respuesta = 3;
         }
         else {
-    /*  CODIGO REMOVIDO Y PUESTO EN UTILCALENDAR
-        Calendar esteDia = Calendar.getInstance();
-        Calendar elOtro = Calendar.getInstance();
-        esteDia.set(this.getInicio().get(Calendar.YEAR),
-                this.getInicio().get(Calendar.MONTH),
-                this.getInicio().get(Calendar.DAY_OF_MONTH),
-                this.getInicio().get(0),
-                this.getInicio().get(0));
-        esteDia.set(Calendar.SECOND,0);
-        esteDia.set(Calendar.MILLISECOND,0);
-
-        elOtro.set(o.getInicio().get(Calendar.YEAR),
-                o.getInicio().get(Calendar.MONTH),
-                o.getInicio().get(Calendar.DAY_OF_MONTH),
-                o.getInicio().get(0),
-                o.getInicio().get(0));
-        elOtro.set(Calendar.SECOND,0);
-        elOtro.set(Calendar.MILLISECOND,0);*/
-
-            if (!this.isFijo() && !o.isFijo()) {
-                respuesta = UtilCalendar.compareDateTo(this.getInicio(), o.getInicio());
+            //Compruebo si el objeto es si mismo.
+            if (this.getId() == o.getId()) {
+                respuesta = 2;
             } else {
-                //Compruebo dia
-                if (this.getInicio().get(Calendar.DAY_OF_WEEK) == o.getInicio().get(Calendar.DAY_OF_WEEK)) {
-                    //is el dia es el mismo comparo horas.
-                    respuesta = 0;
+                //Compruebo si ninguna de las reservas es fija coparo unicamente las fechas
+                if (!this.isFijo() && !o.isFijo()) {
+                    respuesta = UtilCalendar.compareDateTo(this.getInicio(), o.getInicio());
                 } else {
-                    if (this.getInicio().get(Calendar.DAY_OF_WEEK) < o.getInicio().get(Calendar.DAY_OF_WEEK)) {
-                        respuesta = -1;
+                    //si alguna de las dos respervas es fija, comparo dia de la semana y hora.
+                    //Compruebo dia
+                    if (this.getInicio().get(Calendar.DAY_OF_WEEK) == o.getInicio().get(Calendar.DAY_OF_WEEK)) {
+                        //is el dia es el mismo comparo horas.
+                        respuesta = 0;
                     } else {
-                        respuesta = 1;
+                        if (this.getInicio().get(Calendar.DAY_OF_WEEK) < o.getInicio().get(Calendar.DAY_OF_WEEK)) {
+                            respuesta = -1;
+                        } else {
+                            respuesta = 1;
+                        }
                     }
                 }
             }

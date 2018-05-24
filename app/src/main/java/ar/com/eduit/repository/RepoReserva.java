@@ -7,6 +7,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -58,6 +59,14 @@ public class RepoReserva {
         dao.deleteById(id);
     }
 
+    public List<Reserva> getAllReservasOrdenadoFiltrado(long oDaId) throws Exception {
+        QueryBuilder<Reserva,Long> qb= dao.queryBuilder();
+        qb.where().eq("odalquilerID", oDaId);
+        qb.orderBy("inicio",true);
+        qb.orderBy("fijo", false);
+        return qb.query();
+
+    }
     public List<Reserva> getAllReservasOrdenado() throws Exception {
         QueryBuilder<Reserva,Long> qb= dao.queryBuilder();
         qb.orderBy("inicio",true);
@@ -78,6 +87,27 @@ public class RepoReserva {
         qb.orderBy("fijo", false);
         qb.where().ge("inicio",inicioAux).
                    or().eq("fijo",true);
+
+        return qb.query();
+
+    }
+
+    public List<Reserva> getReservasOrdenadoPosterioresFiltrado(long oDaId) throws Exception {
+        Calendar aux = Calendar.getInstance();
+        aux.set(Calendar.HOUR_OF_DAY, 0);
+        aux.set(Calendar.MINUTE, 0);
+        aux.set(Calendar.SECOND, 0);
+        aux.set(Calendar.MILLISECOND, 0);
+        Date inicioAux = aux.getTime();
+        QueryBuilder<Reserva,Long> qb= dao.queryBuilder();
+        qb.orderBy("inicio",true);
+        qb.orderBy("fijo", false);
+        Where<Reserva, Long> w = qb.where();
+        w.and(w.eq("odalquilerID", oDaId),
+                w.or(w.gt("inicio",inicioAux),w.eq("fijo",true))
+        );
+
+
 
         return qb.query();
 
@@ -118,5 +148,16 @@ public class RepoReserva {
 
     public boolean reservasContainID(long id) throws SQLException {
         return dao.idExists(id);
+    }
+
+    public boolean reservasContainIDOdAlquiler(long id) throws SQLException {
+        QueryBuilder<Reserva,Long> qb= dao.queryBuilder();
+        List<Reserva> aux = qb.where().
+                eq("odalquilerID",id).query();
+
+        boolean respuesta = false;
+        if (aux.size()>0){respuesta=true;}
+
+        return respuesta;
     }
 }

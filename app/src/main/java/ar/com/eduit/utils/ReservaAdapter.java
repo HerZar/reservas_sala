@@ -1,5 +1,6 @@
 package ar.com.eduit.utils;
 
+import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,9 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.List;
 
+import ar.com.eduit.entities.ODeAlquiler;
 import ar.com.eduit.entities.Reserva;
+import ar.com.eduit.repository.RepoODAlquiler;
 import ar.com.eduit.reservassala.R;
 
 public class ReservaAdapter extends BaseAdapter {
@@ -19,9 +22,12 @@ public class ReservaAdapter extends BaseAdapter {
 
     private List<Reserva> reservas;
     private LinearLayout llmainl;
+    private Context contexto;
 
-    public ReservaAdapter(List<Reserva> reservas) {
+    public ReservaAdapter(List<Reserva> reservas, Context cont) {
+
         this.reservas = reservas;
+        this.contexto = cont;
     }
 
 
@@ -57,6 +63,7 @@ public class ReservaAdapter extends BaseAdapter {
         Reserva reserva = (Reserva) getItem(position);
 
         //Referencio las vistas
+        TextView twOdAlquiler = (TextView) view.findViewById(R.id.twOdAlquiler);
         TextView twNombre = (TextView) view.findViewById(R.id.twNombre);
         TextView twFecha = (TextView) view.findViewById(R.id.twFecha);
         TextView twHorario = (TextView) view.findViewById(R.id.twHorario);
@@ -64,6 +71,14 @@ public class ReservaAdapter extends BaseAdapter {
 
         llmainl = (LinearLayout) view.findViewById(R.id.mainLayout);
 
+        //Cargo el objeto de alquiler.
+        ODeAlquiler alquiler = null;
+        try {
+            alquiler = RepoODAlquiler.getInstance(contexto).getODeAlquilerById(reserva.getOdalquilerID());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        twOdAlquiler.setText(contexto.getResources().getString(R.string.Reserva) + alquiler.getName());
         //Cargo Nombre al cual esta asignada la reserva al view.
         //twNombre.setText(Resources.getSystem().getString(R.string.reservado_a) + reserva.getNombre());
         twNombre.setText(parent.getContext().getString(R.string.reservado_a) +" "+ reserva.getNombre());

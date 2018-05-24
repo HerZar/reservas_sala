@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/reserva_elcuervo"
+        android:icon="@mipmap/ic_app_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -19,9 +19,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AgregarReserva" />
-        <activity android:name=".options" />
-        <activity android:name=".AgendaResHist"/>
+        <activity
+            android:name=".AgregarReserva"
+            android:label="@string/label_nueva_reserva"
+                  />
+        <activity
+            android:name=".AgendaResHist"
+            android:label="@string/label_historico_reservas"
+            />
+        <activity
+            android:name=".SetingsActivity"
+            android:label="@string/label_administracion"
+            />
     </application>
 
 </manifest>

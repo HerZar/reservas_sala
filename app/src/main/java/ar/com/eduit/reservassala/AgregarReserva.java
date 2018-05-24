@@ -1,15 +1,21 @@
 package ar.com.eduit.reservassala;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -18,14 +24,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import ar.com.eduit.entities.ODeAlquiler;
 import ar.com.eduit.entities.Reserva;
+import ar.com.eduit.repository.RepoODAlquiler;
 import ar.com.eduit.repository.RepoReserva;
+import ar.com.eduit.utils.AlquilerAdapter;
 import ar.com.eduit.utils.DatePickerFragment;
 import ar.com.eduit.utils.ReservaAdapter;
 import ar.com.eduit.utils.TimePickerFragment;
 import ar.com.eduit.utils.UtilCalendar;
 
-public class AgregarReserva extends AppCompatActivity {
+public class AgregarReserva extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private TextView idTv;
     private EditText nombreEt;
@@ -37,13 +46,14 @@ public class AgregarReserva extends AppCompatActivity {
     private ListView lvListaReservas;
 
     private long itemID;
-
+    private Spinner psODeAlquiler;
+    private Dialog dialogoAgregar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_reserva);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         idTv = (TextView) findViewById(R.id.tvID);
         nombreEt = (EditText) findViewById(R.id.etNombre);
         fechaEt = (EditText) findViewById(R.id.etFecha);
@@ -51,15 +61,42 @@ public class AgregarReserva extends AppCompatActivity {
         horaEtFin = (EditText) findViewById(R.id.etHoraFin);
         llReservados = (LinearLayout) findViewById(R.id.llReservados);
         lvListaReservas = (ListView) findViewById(R.id.lvListaReservas);
+        dialogoAgregar = new Dialog(AgregarReserva.this, R.style.Theme_AppCompat_Light_Dialog_Alert);
+        //deshabilitamos el título por defecto
+        dialogoAgregar.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //obligamos al usuario a pulsar los botones para cerrarlo
+        //dialogoAgregar.setCancelable(false);
+        //establecemos el contenido de nuestro dialog
+        dialogoAgregar.setContentView(R.layout.init_alquiler_dialog);
 
         // creo el radio butom para saber si la sala es fija en ese dia y horario.
         fijoCb = (CheckBox) findViewById(R.id.cbFijo);
+        psODeAlquiler = (Spinner) findViewById(R.id.sp_odalquiler);
+        psODeAlquiler.setOnItemSelectedListener(this);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        List<ODeAlquiler> lOdeAlquiler = null;
+        try {
+            lOdeAlquiler = RepoODAlquiler.getInstance(getApplicationContext()).getAllODeAlquilers();
+            if (lOdeAlquiler.size()==0){
+                callAgregarDialog(-1l);
 
+            }
+            lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.seleccionar_objeto_de_alquiler)));
+            //ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.adapter_alquiler, R.id.tvAlquiler , lOdeAlquiler);
+            AlquilerAdapter adapter = new AlquilerAdapter(lOdeAlquiler);
+            // Apply the adapter to the spinner
+            psODeAlquiler.setAdapter(adapter);
+            //psODeAlquiler.setPrompt("Objeto de Alquiler");
+            psODeAlquiler.setSelection(lOdeAlquiler.size()-1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             itemID = getIntent().getExtras().getLong("itemID");
             cargarVistas(itemID);
         } catch (Exception e) {
             //Continua sin cargar una reserva... reserva nueva.
+            e.printStackTrace();
         }
     }
 
@@ -69,6 +106,9 @@ public class AgregarReserva extends AppCompatActivity {
             Reserva reserva = RepoReserva.getInstance(getApplicationContext()).getReservaById(itemID);
             //Cargo el ID de la reserva.
 
+            //Cargo el select del spinner
+            AlquilerAdapter adapter = (AlquilerAdapter) psODeAlquiler.getAdapter();
+            psODeAlquiler.setSelection(adapter.getPosition(reserva.getOdalquilerID()));;
             idTv.setText(String.valueOf(reserva.getId()));
             //Cargo Nombre al cual esta asignada la reserva al view.
             nombreEt.setText(reserva.getNombre());
@@ -95,7 +135,7 @@ public class AgregarReserva extends AppCompatActivity {
             }
             yearAux = yearAux + reserva.getInicio().get(Calendar.YEAR);
             String Fecha = dayAux + "/" + monthAux + "/" + yearAux
-                    + " " + UtilCalendar.getDiaSemana(getApplicationContext(),reserva.getInicio().get(Calendar.DAY_OF_WEEK) - 1);
+                    + " " + UtilCalendar.getDiaSemana(getApplicationContext(), reserva.getInicio().get(Calendar.DAY_OF_WEEK) - 1);
 
 
             fechaEt.setText(Fecha);
@@ -180,7 +220,7 @@ public class AgregarReserva extends AppCompatActivity {
                         }
                         yearAux = yearAux + year;
                         final String selectedDate = dayAux + "/" + monthAux + "/" + yearAux
-                                + " " + UtilCalendar.getDiaSemana(getApplicationContext(),auxFecha.get(Calendar.DAY_OF_WEEK) - 1);
+                                + " " + UtilCalendar.getDiaSemana(getApplicationContext(), auxFecha.get(Calendar.DAY_OF_WEEK) - 1);
 
                         fechaEt.setText(selectedDate);
                     }
@@ -192,23 +232,7 @@ public class AgregarReserva extends AppCompatActivity {
 
     public void etHoraClick(View view) {
         showTimePieckerDialog(view);
-        /*
-        final EditText timeAux = (EditText) findViewById(view.getId());
-        if (!timeAux.getText().toString().isEmpty() && !timeAux.getText().toString().equals(null)){
-            int hour = Integer.parseInt(timeAux.getText().toString().substring(0, 2))+1;
-            int min = Integer.parseInt(timeAux.getText().toString().substring(3, 5));
-            String hourAux = "";
-            String minAux = "";
-            if (hour < 10) {
-                hourAux = hourAux + "0";
-            }
-            hourAux = hourAux + hour;
-            if (min < 10) {
-                minAux = minAux + "0";
-            }
-            minAux = minAux + min;
-            horaEtFin.setText(hourAux + ":" + minAux);
-        }*/
+
     }
 
     public void etHoraClickFin(View view) {
@@ -265,6 +289,8 @@ public class AgregarReserva extends AppCompatActivity {
             res.setFijo(fijoCb.isChecked());
             res.setInicio(UtilCalendar.getCalendarFromString(fechaEt.getText().toString(), horaEt.getText().toString()));
             res.setFin(UtilCalendar.getCalendarFromString(fechaEt.getText().toString(), horaEtFin.getText().toString()));
+            ODeAlquiler odaAux = (ODeAlquiler) psODeAlquiler.getSelectedItem();
+            res.setOdalquilerID(odaAux.getId());
 
 
             if (res.getInicio().compareTo(Calendar.getInstance()) >= 0) {
@@ -319,7 +345,7 @@ public class AgregarReserva extends AppCompatActivity {
             for (Reserva item : quitados) {
                 listRes.remove(item);
             }
-            final ReservaAdapter resAdapter = new ReservaAdapter(listRes);
+            final ReservaAdapter resAdapter = new ReservaAdapter(listRes, getApplicationContext());
             lvListaReservas.setAdapter(resAdapter);
             llReservados.setVisibility(View.VISIBLE);
         } catch (Exception e) {
@@ -354,13 +380,84 @@ public class AgregarReserva extends AppCompatActivity {
 
     private boolean reservaCompleta() {
         boolean respuesta = true;
+        ODeAlquiler oda = (ODeAlquiler) psODeAlquiler.getSelectedItem();
         if (nombreEt.getText().toString().isEmpty()
                 || fechaEt.getText().toString().isEmpty()
                 || horaEt.getText().toString().isEmpty()
-                || horaEtFin.getText().toString().isEmpty()) {
+                || horaEtFin.getText().toString().isEmpty()
+                || oda.getId() == 0l
+                ){
             Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.validacion_campos_vacios), Toast.LENGTH_LONG).show();
             respuesta = false;
         }
         return respuesta;
     }
+
+
+    private void resumeAlquileres(Context con) throws Exception {
+        List<ODeAlquiler> lOdeAlquiler = null;
+        lOdeAlquiler = RepoODAlquiler.getInstance(con).getAllODeAlquilers();
+        lOdeAlquiler.add(new ODeAlquiler("Seleccionar Objeto de Alquiler"));
+        AlquilerAdapter adapter = new AlquilerAdapter(lOdeAlquiler);
+        // Apply the adapter to the spinner
+        psODeAlquiler.setAdapter(adapter);
+        psODeAlquiler.setSelection(lOdeAlquiler.size() - 1);
+    }
+
+    private void callAgregarDialog( long id){
+        ODeAlquiler oda = null;
+        try {
+            oda = RepoODAlquiler.getInstance(getApplication()).getODeAlquilerById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Button btnAceptar = (Button) dialogoAgregar.findViewById(R.id.btnAceptar);
+        final EditText etOdAlquiler = (EditText) dialogoAgregar.findViewById(R.id.etAlquiler);
+        if (oda != null){
+            etOdAlquiler.setText(oda.getName());
+        }else{
+            etOdAlquiler.setText("");
+        }
+        final ODeAlquiler finalOda = oda;
+        btnAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (!etOdAlquiler.getText().toString().isEmpty()) {
+                        if(finalOda !=null) {
+                            finalOda.setName(etOdAlquiler.getText().toString());
+                            RepoODAlquiler.getInstance(AgregarReserva.this).update(finalOda);
+
+                        }else{
+                            RepoODAlquiler.getInstance(AgregarReserva.this).save(new ODeAlquiler(etOdAlquiler.getText().toString()));
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    resumeAlquileres(AgregarReserva.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                dialogoAgregar.dismiss();
+            }
+        });
+        dialogoAgregar.show();
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+
 }

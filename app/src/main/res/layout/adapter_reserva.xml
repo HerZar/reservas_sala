@@ -7,6 +7,16 @@
     android:id="@+id/mainLayout"
     >
 
+
+    <TextView
+        android:id="@+id/twOdAlquiler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dim_text_item"
+        android:textColor="@color/item_text_color"
+        android:text="@string/prueba"
+        />
+
     <TextView
         android:id="@+id/twNombre"
         android:layout_width="match_parent"
