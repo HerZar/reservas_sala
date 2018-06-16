@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">Reservations</string>
+    <string name="banner_ad_unit_id_hist">ca-app-pub-2504725253688326/3961896203</string>
+    <string name="banner_ad_unit_id_mainact">ca-app-pub-2504725253688326/3246432523</string>
+    <string name="banner_ad_unit_id_settings">ca-app-pub-2504725253688326/5294627316</string>
+    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="app_name">Reservations Manager</string>
+    <string name="label_reservas">Reservations</string>
     <string name="label_historico_reservas">Historic Reservations </string>
     <string name="label_nueva_reserva">New Reservation</string>
     <string name="label_administracion">Administration</string>	

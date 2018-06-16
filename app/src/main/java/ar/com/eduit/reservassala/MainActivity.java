@@ -19,6 +19,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.eduit.entities.ODeAlquiler;
@@ -31,10 +36,22 @@ import ar.com.eduit.utils.ReservaAdapter;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private TextView tvEmptyMesage;
+
+    //Elementos de lista de reservas
     private ListView lwReservas;
+    private ReservaAdapter resAdapter;
+    private List<Reserva> listRes;
+    //-----------------------------
+    //Elementos de lista de Objetos de Alquiler
+    private List<ODeAlquiler> lOdeAlquiler;
+    private AlquilerAdapter odaAdapter;
     private Spinner psODeAlquiler;
+    //-----------------------------
+
     private Dialog dialogoAgregar = null;
     private Dialog customDialog = null;
+
+    private  AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +68,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+        //initialization on adMob
+        MobileAds.initialize(this, "ca-app-pub-2504725253688326~4113229007");
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        //-----------------------------------------------
+
         lwReservas = (ListView) findViewById(R.id.lvListaReservas);
         tvEmptyMesage = (TextView) findViewById(R.id.tvEmptyMesage);
         psODeAlquiler = (Spinner) findViewById(R.id.sp_odalquiler);
         psODeAlquiler.setOnItemSelectedListener(this);
 
+        // crear dialogo para crear Objeto de alquiler
         dialogoAgregar = new Dialog(MainActivity.this, R.style.Theme_AppCompat_Light_Dialog_Alert);
         //deshabilitamos el título por defecto
         dialogoAgregar.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -63,6 +88,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //dialogoAgregar.setCancelable(false);
         //establecemos el contenido de nuestro dialog
         dialogoAgregar.setContentView(R.layout.init_alquiler_dialog);
+
+        //Inicializo la lista de Reservas
+        listRes = new ArrayList<>();
+        resAdapter = new ReservaAdapter(listRes, getApplicationContext());
+        lwReservas.setAdapter(resAdapter);
+
+        //Inicializo la lista de objetos de alquiler
+        lOdeAlquiler = new ArrayList<>();
+        odaAdapter = new AlquilerAdapter(lOdeAlquiler);
+        psODeAlquiler.setAdapter(odaAdapter);
     }
 
     @Override
@@ -135,8 +170,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } catch (Exception e) {
 
         }
-        List<ODeAlquiler> lOdeAlquiler = null;
-        try{
+
+        try {
+            resumeAlquileres(getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        /*try{
             // cargo el spinner con la lista de objectos a alquilar.
             // Create an ArrayAdapter using the string array and a default spinner layout
             lOdeAlquiler = RepoODAlquiler.getInstance(getApplicationContext()).getAllODeAlquilers();
@@ -144,7 +185,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 callAgregarDialog(-1l);
 
             }
-            lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.todos)));
+            if (lOdeAlquiler.size()!=1) {
+                lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.todos)));
+            }
             AlquilerAdapter adapter = new AlquilerAdapter(lOdeAlquiler);
             // Apply the adapter to the spinner
             psODeAlquiler.setAdapter(adapter);
@@ -152,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+*/
         super.onResume();
     }
 
@@ -195,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void resumeList(Context context) throws Exception {
 
         ODeAlquiler oda = (ODeAlquiler) psODeAlquiler.getSelectedItem();
-        List<Reserva> listRes=null;
+        listRes=null;
         if (oda.getId()>0){
             listRes = RepoReserva.getInstance(context)
                     .getReservasOrdenadoPosterioresFiltrado(oda.getId());
@@ -204,9 +247,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             listRes = RepoReserva.getInstance(context)
                     .getReservasOrdenadoPosteriores();
         }
-        //     listRes = getPosteriores(listRes);
-        final ReservaAdapter resAdapter = new ReservaAdapter(listRes, getApplicationContext());
-        lwReservas.setAdapter(resAdapter);
+
+        resAdapter.setReservas(listRes);
+        resAdapter.notifyDataSetChanged();
         if (lwReservas.getAdapter().getCount() > 0) {
             tvEmptyMesage.setVisibility(View.GONE);
         }else {
@@ -215,12 +258,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void resumeAlquileres(Context con) throws Exception {
-        List<ODeAlquiler> lOdeAlquiler = null;
         lOdeAlquiler = RepoODAlquiler.getInstance(con).getAllODeAlquilers();
-        lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.todos)));
-        AlquilerAdapter adapter = new AlquilerAdapter(lOdeAlquiler);
+        if (lOdeAlquiler.size() !=1) {
+            lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.todos)));
+        }
+
+        odaAdapter.setAlquileres(lOdeAlquiler);
+        psODeAlquiler.setPopupBackgroundResource(R.color.fondo_aplicacion);
         // Apply the adapter to the spinner
-        psODeAlquiler.setAdapter(adapter);
+        //psODeAlquiler.setAdapter(odaAdapter);
+        odaAdapter.notifyDataSetChanged();
         psODeAlquiler.setSelection(lOdeAlquiler.size() - 1);
     }
 

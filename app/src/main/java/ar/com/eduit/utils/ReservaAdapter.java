@@ -24,12 +24,20 @@ public class ReservaAdapter extends BaseAdapter {
     private LinearLayout llmainl;
     private Context contexto;
 
+
     public ReservaAdapter(List<Reserva> reservas, Context cont) {
 
         this.reservas = reservas;
         this.contexto = cont;
     }
 
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
 
     @Override
     public int getCount() {
@@ -47,7 +55,7 @@ public class ReservaAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
 
         // auxiliares
         String dayAux = "";
@@ -138,6 +146,20 @@ public class ReservaAdapter extends BaseAdapter {
 
         if (reserva.isForToday()){
             llmainl.setBackgroundColor(ContextCompat.getColor(parent.getContext(),R.color.fondo_reservas_dia));
+//            final RippleDrawable ripple = (RippleDrawable) llmainl.getBackground();
+//            llmainl.setOnTouchListener(new View.OnTouchListener() {
+//
+//                @Override
+//                public boolean onTouch(View view, MotionEvent motionEvent) {
+//                    switch (view.getId()){
+//                        case  R.id.mainLayout:
+//                            ripple.setHotspot(motionEvent.getX(),motionEvent.getY());
+//                            ripple.setColor(ColorStateList.valueOf(parent.getResources().getColor(R.color.fondo_aplicacion)));
+//                    }
+//                    return false;
+//                }
+//
+//            });
         }
 
         return view;

@@ -13,6 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.List;
 
 import ar.com.eduit.Exceptions.ContainReservasException;
@@ -27,10 +30,17 @@ public class SetingsActivity extends AppCompatActivity {
     private Dialog dialogoOptions = null;
     private TextView tvEmptyMesage;
 
+    private  AdView mAdView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setings);
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         lvAlquileres = (ListView) findViewById(R.id.lvListaAlquileres);
         tvEmptyMesage = (TextView) findViewById(R.id.tvEmptyMesage);

@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">Reservas</string>
-    <string name="label_historico_reservas">Historico Reservas </string>
+    <string name="banner_ad_unit_id_hist">ca-app-pub-2504725253688326/3961896203</string>
+    <string name="banner_ad_unit_id_mainact">ca-app-pub-2504725253688326/3246432523</string>
+    <string name="banner_ad_unit_id_settings">ca-app-pub-2504725253688326/5294627316</string>
+    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="app_name">Reservas Manager</string>
+    <string name="label_reservas">Reservas</string>
+    <string name="label_historico_reservas">Histórico Reservas </string>
     <string name="label_nueva_reserva">Nueva Reserva</string>
     <string name="label_administracion">Administración</string>
     <string name="action_settings">Settings</string>
@@ -20,8 +25,8 @@
     <string name="editar">Editar</string>
     <string name="title_activity_options">options</string>
     <string name="listado_reservados">Horarios Reservados a la fecha</string>
-    <string name="historico">Historico</string>
-    <string name="borrar_todos">Eliminar Historico</string>
+    <string name="historico">Histórico</string>
+    <string name="borrar_todos">Eliminar Histórico</string>
     <string name="no_se_encuentran_reservas_a_la_fecha">No se encuentran reservas a la fecha.</string>
     <string name="reservado_a">Reservado a </string>
     <string name="prueba">PRUEBA</string>
@@ -32,10 +37,10 @@
     <string name="a_hasta"> a </string>
     <string name="todos">Todos</string>
     <string name="seleccionar_objeto_de_alquiler">Seleccionar Objeto de Alquiler</string>
-    <string name="Historicos_borrados">Registros historicos borrados.</string>
+    <string name="Historicos_borrados">Registros históricos borrados.</string>
     <string name="la_reserva_ha_sido_eliminada">La reserva ha sido eliminada</string>
     <string name="objeto_de_alquiler_borrado">El Objeto de alquiler a sido eliminado.</string>
-    <string name="error_borrar_historicos">Error al borrar los registros historicos.</string>
+    <string name="error_borrar_historicos">Error al borrar los registros históricos.</string>
     <string name="validacion_horas_invertidas">El Horario de fin no puede ser anterior al inicio.</string>
     <string name="validacion_reservas_superpuestas">La reserva se superpone con otra reserva guardada.</string>
     <string name="error_al_guardar_reserva">Error al guardar la reserva.</string>

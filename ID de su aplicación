@@ -1,0 +1,22 @@
+ca-app-pub-2504725253688326~4113229007
+ca-app-pub-2504725253688326~4113229007
+ca-app-pub-2504725253688326/3961896203
+
+signed key
+reservasmanager
+
+pass
+reservas.libra.2509
+alias 
+reservaskeystore
+
+Simple anotador de reservas sobre productos o servicios.
+
+Listado simple de reservas sobre productos o servicios.
+Permite anotar reservas de productos o servicios para un cliente, por fecha y periodo de tiempo inferior a un día.
+Características:
+Muestra reservas a vencer en el día en curso.
+Creación simple de nuevas reservas.
+Valida que la nueva reserva no se superponga con reservas ya realizadas.
+Muestra reservas en superposición de horario.
+Mantiene histórico de reservas realizadas.

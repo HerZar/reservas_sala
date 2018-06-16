@@ -11,7 +11,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +27,24 @@ import ar.com.eduit.repository.RepoReserva;
 import ar.com.eduit.utils.AlquilerAdapter;
 import ar.com.eduit.utils.ReservaAdapter;
 
-public class AgendaResHist extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    private ListView lwReservas;
-    private Spinner psODeAlquiler;
+public class AgendaResHist extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    //Elementos de lista de reservas
+    private ListView lwReservas;
+    private ReservaAdapter resAdapter;
+    private List<Reserva> listRes;
+    //-----------------------------
+    //Elementos de lista de Objetos de Alquiler
+    private List<ODeAlquiler> lOdeAlquiler;
+    private AlquilerAdapter odaAdapter;
+    private Spinner psODeAlquiler;
+    //-----------------------------
+
+    private TextView tvEmptyMesage;
     private Dialog customDialog = null;
-    
+
+    private AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +53,20 @@ public class AgendaResHist extends AppCompatActivity implements AdapterView.OnIt
         lwReservas = (ListView) findViewById(R.id.lvListaReservas);
         psODeAlquiler = (Spinner) findViewById(R.id.sp_odalquiler);
         psODeAlquiler.setOnItemSelectedListener(this);
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
+        //Inicializo la lista de Reservas
+        listRes = new ArrayList<>();
+        resAdapter = new ReservaAdapter(listRes, getApplicationContext());
+        lwReservas.setAdapter(resAdapter);
+
+        //Inicializo la lista de objetos de alquiler
+        lOdeAlquiler = new ArrayList<>();
+        odaAdapter = new AlquilerAdapter(lOdeAlquiler);
+        psODeAlquiler.setAdapter(odaAdapter);
     }
 
     @Override
@@ -81,7 +111,7 @@ public class AgendaResHist extends AppCompatActivity implements AdapterView.OnIt
                                                   @Override
                                                   public void onClick(View v) {
                                                       Intent intent = new Intent(AgendaResHist.this, AgregarReserva.class);
-                                                      intent.putExtra("itemID" , itemID);
+                                                      intent.putExtra("itemID", itemID);
                                                       startActivity(intent);
                                                       customDialog.dismiss();
                                                       try {
@@ -96,24 +126,18 @@ public class AgendaResHist extends AppCompatActivity implements AdapterView.OnIt
                     return false;
                 }
             });
-            // cargo el spinner con la lista de objectos a alquilar.
-            // Create an ArrayAdapter using the string array and a default spinner layout
-            List<ODeAlquiler> lOdeAlquiler = RepoODAlquiler.getInstance(getApplicationContext()).getAllODeAlquilers();
-            lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.todos)));
-            AlquilerAdapter adapter = new AlquilerAdapter(lOdeAlquiler);
-            // Apply the adapter to the spinner
-            psODeAlquiler.setAdapter(adapter);
-            psODeAlquiler.setSelection(lOdeAlquiler.size() - 1);
+
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.Error_de_Carga_agenda), Toast.LENGTH_SHORT).show();
-            List<ODeAlquiler> lOdeAlquiler = new ArrayList<>();
-            lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.todos)));
-            AlquilerAdapter adapter = new AlquilerAdapter(lOdeAlquiler);
-            // Apply the adapter to the spinner
-            psODeAlquiler.setAdapter(adapter);
-            psODeAlquiler.setSelection(lOdeAlquiler.size() - 1);
+
         }
 
+        //Cargo el spinner de alquileres
+        try {
+            resumeAlquileres(getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onResume();
     }
 
@@ -122,7 +146,7 @@ public class AgendaResHist extends AppCompatActivity implements AdapterView.OnIt
             RepoReserva.getInstance(getApplicationContext()).deleteReservasViejas();
             Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.Historicos_borrados), Toast.LENGTH_LONG);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),getApplicationContext().getString(R.string.error_borrar_historicos), Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.error_borrar_historicos), Toast.LENGTH_LONG);
         }
         try {
             List<Reserva> listRes = RepoReserva.getInstance(getApplicationContext())
@@ -130,25 +154,44 @@ public class AgendaResHist extends AppCompatActivity implements AdapterView.OnIt
             final ReservaAdapter resAdapter = new ReservaAdapter(listRes, getApplicationContext());
             lwReservas.setAdapter(resAdapter);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),getApplicationContext().getString(R.string.Error_de_Carga_agenda), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.Error_de_Carga_agenda), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void resumeList(Context context) throws Exception {
 
         ODeAlquiler oda = (ODeAlquiler) psODeAlquiler.getSelectedItem();
-        List<Reserva> listRes=null;
+        listRes=null;
         if (oda.getId()>0){
             listRes = RepoReserva.getInstance(context)
-                    .getAllReservasOrdenadoFiltrado(oda.getId());
+                    .getReservasOrdenadoPosterioresFiltrado(oda.getId());
         }
         else {
             listRes = RepoReserva.getInstance(context)
-                    .getAllReservasOrdenado();
+                    .getReservasOrdenadoPosteriores();
         }
-        //     listRes = getPosteriores(listRes);
-        final ReservaAdapter resAdapter = new ReservaAdapter(listRes, getApplicationContext());
-        lwReservas.setAdapter(resAdapter);
+
+        resAdapter.setReservas(listRes);
+        resAdapter.notifyDataSetChanged();
+        if (lwReservas.getAdapter().getCount() > 0) {
+            tvEmptyMesage.setVisibility(View.GONE);
+        }else {
+            tvEmptyMesage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void resumeAlquileres(Context con) throws Exception {
+        lOdeAlquiler = RepoODAlquiler.getInstance(con).getAllODeAlquilers();
+        if (lOdeAlquiler.size() != 1) {
+            lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.todos)));
+        }
+
+        odaAdapter.setAlquileres(lOdeAlquiler);
+        psODeAlquiler.setPopupBackgroundResource(R.color.fondo_aplicacion);
+        // Apply the adapter to the spinner
+        //psODeAlquiler.setAdapter(odaAdapter);
+        odaAdapter.notifyDataSetChanged();
+        psODeAlquiler.setSelection(lOdeAlquiler.size() - 1);
     }
 
     @Override

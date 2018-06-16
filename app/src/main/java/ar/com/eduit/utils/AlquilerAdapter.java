@@ -19,6 +19,14 @@ public class AlquilerAdapter  extends BaseAdapter {
         this.alquileres = alquileres;
     }
 
+    public List<ODeAlquiler> getAlquileres() {
+        return alquileres;
+    }
+
+    public void setAlquileres(List<ODeAlquiler> alquileres) {
+        this.alquileres = alquileres;
+    }
+
     @Override
     public int getCount() {
         return alquileres.size();
