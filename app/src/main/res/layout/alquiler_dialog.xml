@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_aplicacion"
+    android:gravity="center">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/que_deseas_alquilar"
+        android:backgroundTint="@color/Blanco"
+        android:background="@color/gris"
+        android:textColorHint="@color/negro"
+        android:inputType="textCapWords"
+        android:textSize="@dimen/dim_text_item"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/etAlquiler"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/aceptar"
+        android:padding="10dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/btnAceptar" />
+
+</LinearLayout>

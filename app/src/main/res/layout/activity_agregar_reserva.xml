@@ -4,27 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/fondo_aplicacion"
+    android:orientation="vertical"
     tools:context="ar.com.eduit.reservassala.AgregarReserva">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nueva_reserva"
-        android:textSize="@dimen/dim_text_item"
-        android:textColor="@color/item_text_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/tvID"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:visibility="gone"
-        />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+
+    <Spinner
+        android:id="@+id/sp_odalquiler"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
 
 
     <EditText
@@ -33,10 +32,10 @@
         android:layout_height="wrap_content"
         android:hint="@string/a_nombre_de"
         android:inputType="textCapWords"
-        android:textSize="@dimen/dim_text_item"
+        android:maxLines="1"
         android:textColor="@color/item_text_color"
         android:textColorHint="@color/text_hint_color"
-        android:maxLines="1" />
+        android:textSize="@dimen/dim_text_item" />
 
 
     <EditText
@@ -48,10 +47,10 @@
         android:hint="@string/seleccionar_fecha"
         android:inputType="date"
         android:maxLines="1"
-        android:textSize="@dimen/dim_text_item"
+        android:onClick="etFechaClick"
         android:textColor="@color/item_text_color"
         android:textColorHint="@color/text_hint_color"
-        android:onClick="etFechaClick" />
+        android:textSize="@dimen/dim_text_item" />
 
     <EditText
         android:id="@+id/etHora"
@@ -62,10 +61,10 @@
         android:hint="@string/seleccionar_horaIni"
         android:inputType="time"
         android:maxLines="1"
-        android:textSize="@dimen/dim_text_item"
+        android:onClick="etHoraClick"
         android:textColor="@color/item_text_color"
         android:textColorHint="@color/text_hint_color"
-        android:onClick="etHoraClick" />
+        android:textSize="@dimen/dim_text_item" />
 
     <EditText
         android:id="@+id/etHoraFin"
@@ -76,10 +75,10 @@
         android:hint="@string/seleccionar_horaFin"
         android:inputType="time"
         android:maxLines="1"
-        android:textSize="@dimen/dim_text_item"
+        android:onClick="etHoraClickFin"
         android:textColor="@color/item_text_color"
         android:textColorHint="@color/text_hint_color"
-        android:onClick="etHoraClickFin" />
+        android:textSize="@dimen/dim_text_item" />
 
     <CheckBox
         android:id="@+id/cbFijo"
@@ -88,9 +87,9 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"
         android:checked="false"
-        android:textSize="@dimen/dim_text_item"
+        android:text="@string/fijo"
         android:textColor="@color/item_text_color"
-        android:text="@string/fijo" />
+        android:textSize="@dimen/dim_text_item" />
 
     <Button
         android:layout_width="wrap_content"
@@ -98,35 +97,36 @@
         android:onClick="guardarReserva"
         android:text="@string/guardar" />
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/llReservados"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/lista_reservados">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible">
 
-        <LinearLayout
-            android:id="@+id/llReservados"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="invisible">
+            android:text="@string/listado_reservados"
+            android:textColor="@color/item_text_color"
+            android:textSize="@dimen/dim_text_item" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/listado_reservados"
-                android:textSize="@dimen/dim_text_item"
-                android:textColor="@color/item_text_color"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <ListView
 
                 android:id="@+id/lvListaReservas"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:orientation="vertical"
+                android:layout_height="@dimen/lista_reservados"
                 android:divider="@color/divisor_lista_reservas"
-                android:dividerHeight="1sp"/>
+                android:dividerHeight="1sp"
+                android:orientation="vertical" />
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
 
 </LinearLayout>

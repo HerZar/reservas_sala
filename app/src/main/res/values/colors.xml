@@ -11,4 +11,6 @@
     <color name="divisor_lista_reservas">#040404</color>
     <color name="negro">#040404</color>
     <color name="Blanco">#FFFFFF</color>
+    <color name="gris">#E0E0E0</color>
+
 </resources>
