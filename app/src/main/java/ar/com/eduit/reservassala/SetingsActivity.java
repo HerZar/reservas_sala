@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.eduit.Exceptions.ContainReservasException;
@@ -29,6 +30,9 @@ public class SetingsActivity extends AppCompatActivity {
     private Dialog dialogoAgregar = null;
     private Dialog dialogoOptions = null;
     private TextView tvEmptyMesage;
+
+    private List<ODeAlquiler> lOdeAlquiler;
+    private AlquilerAdapter odaAdapter;
 
     private  AdView mAdView;
 
@@ -68,27 +72,11 @@ public class SetingsActivity extends AppCompatActivity {
         //dialogoAgregar.setCancelable(false);
         //establecemos el contenido de nuestro dialog
         dialogoOptions.setContentView(R.layout.options_dialog);
-    }
 
-    public void agregarAlquiler(View view) {
-          callAgregarDialog(-1l);
-    }
-
-    private void resumeList(Context context) throws Exception {
-
-        List<ODeAlquiler> listalquiler = RepoODAlquiler.getInstance(context).getAllODeAlquilers();
-        //     listRes = getPosteriores(listRes);
-        final AlquilerAdapter alqAdapter = new AlquilerAdapter(listalquiler);
-        lvAlquileres.setAdapter(alqAdapter);
-        if (lvAlquileres.getAdapter().getCount() > 0) {
-            tvEmptyMesage.setVisibility(View.GONE);
-        }else {
-            tvEmptyMesage.setVisibility(View.VISIBLE);
-        }
-
-        lvAlquileres.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        // creo las funciones del dialogo options
+        lvAlquileres.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final long itemID = lvAlquileres.getAdapter().getItemId(position);
                     /*
                     Intent intent = new Intent(getApplicationContext(), options.class);
@@ -132,11 +120,43 @@ public class SetingsActivity extends AppCompatActivity {
                                           }
                 );
                 dialogoOptions.show();
+            }
+        });
+        lvAlquileres.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
                 return false;
             }
         });
 
+
+        //Inicializar lista de alquileres
+        lOdeAlquiler = new ArrayList<>();
+        odaAdapter = new AlquilerAdapter(lOdeAlquiler);
+        lvAlquileres.setAdapter(odaAdapter);
+        try {
+            resumeList(getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    public void agregarAlquiler(View view) {
+          callAgregarDialog(-1l);
+    }
+
+    private void resumeList(Context context) throws Exception {
+
+        lOdeAlquiler = RepoODAlquiler.getInstance(context).getAllODeAlquilers();
+        odaAdapter.setAlquileres(lOdeAlquiler);
+        odaAdapter.notifyDataSetChanged();
+        if (lvAlquileres.getAdapter().getCount() > 0) {
+            tvEmptyMesage.setVisibility(View.GONE);
+        }else {
+            tvEmptyMesage.setVisibility(View.VISIBLE);
+        }
+        }
 
     private void callAgregarDialog( long id){
         ODeAlquiler oda = null;

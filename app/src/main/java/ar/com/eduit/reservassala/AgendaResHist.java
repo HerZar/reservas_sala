@@ -77,9 +77,9 @@ public class AgendaResHist extends AppCompatActivity implements AdapterView.OnIt
             e.printStackTrace();
         }
         try {
-            lwReservas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            lwReservas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final long itemID = lwReservas.getAdapter().getItemId(position);
                     // con este tema personalizado evitamos los bordes por defecto
                     customDialog = new Dialog(AgendaResHist.this, R.style.Theme_AppCompat_Light_Dialog_Alert);
@@ -123,7 +123,6 @@ public class AgendaResHist extends AppCompatActivity implements AdapterView.OnIt
                                               }
                     );
                     customDialog.show();
-                    return false;
                 }
             });
 
@@ -164,11 +163,11 @@ public class AgendaResHist extends AppCompatActivity implements AdapterView.OnIt
         listRes=null;
         if (oda.getId()>0){
             listRes = RepoReserva.getInstance(context)
-                    .getReservasOrdenadoPosterioresFiltrado(oda.getId());
+                    .getAllReservasOrdenadoFiltrado(oda.getId());
         }
         else {
             listRes = RepoReserva.getInstance(context)
-                    .getReservasOrdenadoPosteriores();
+                    .getAllReservasOrdenado();
         }
 
         resAdapter.setReservas(listRes);

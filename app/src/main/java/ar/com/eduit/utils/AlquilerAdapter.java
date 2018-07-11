@@ -50,15 +50,17 @@ public class AlquilerAdapter  extends BaseAdapter {
 
 
         //tomo el layout de item a mostrar
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_alquiler, parent, false);
+        if (convertView== null) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_alquiler, parent, false);
+        }
         // tomo la reserva segun la posicion.
         ODeAlquiler alquiler = (ODeAlquiler) getItem(position);
 
-        tvAlquiler = (TextView) view.findViewById(R.id.tvAlquiler);
-        tvOdAlquilerID = (TextView) view.findViewById(R.id.tvOdAlquilerID);
+        tvAlquiler = (TextView) convertView.findViewById(R.id.tvAlquiler);
+        tvOdAlquilerID = (TextView) convertView.findViewById(R.id.tvOdAlquilerID);
         tvOdAlquilerID.setText(String.valueOf(alquiler.getId()));
         tvAlquiler.setText(alquiler.getName());
-        return view;
+        return convertView;
     }
 
 

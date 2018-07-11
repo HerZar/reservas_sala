@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         try {
 
-            lwReservas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            lwReservas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final long itemID = lwReservas.getAdapter().getItemId(position);
                     /*
                     Intent intent = new Intent(getApplicationContext(), options.class);
@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         }
                     );
                     customDialog.show();
-                    return false;
                 }
             });
 

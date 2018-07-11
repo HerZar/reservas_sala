@@ -66,18 +66,19 @@ public class ReservaAdapter extends BaseAdapter {
 
 
         //tomo el layout de item a mostrar
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_reserva, parent, false);
+        if (convertView==null) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_reserva, parent, false);
+        }
         // tomo la reserva segun la posicion.
         Reserva reserva = (Reserva) getItem(position);
 
         //Referencio las vistas
-        TextView twOdAlquiler = (TextView) view.findViewById(R.id.twOdAlquiler);
-        TextView twNombre = (TextView) view.findViewById(R.id.twNombre);
-        TextView twFecha = (TextView) view.findViewById(R.id.twFecha);
-        TextView twHorario = (TextView) view.findViewById(R.id.twHorario);
-        TextView twHorarioFin = (TextView) view.findViewById(R.id.twHorarioFin);
-
-        llmainl = (LinearLayout) view.findViewById(R.id.mainLayout);
+        TextView twOdAlquiler = (TextView) convertView.findViewById(R.id.twOdAlquiler);
+        TextView twNombre = (TextView) convertView.findViewById(R.id.twNombre);
+        TextView twFecha = (TextView) convertView.findViewById(R.id.twFecha);
+        TextView twHorario = (TextView) convertView.findViewById(R.id.twHorario);
+        TextView twHorarioFin = (TextView) convertView.findViewById(R.id.twHorarioFin);
+        llmainl = (LinearLayout) convertView.findViewById(R.id.mainLayout);
 
         //Cargo el objeto de alquiler.
         ODeAlquiler alquiler = null;
@@ -144,8 +145,12 @@ public class ReservaAdapter extends BaseAdapter {
         hora = hourAux + ":" + minAux;
         twHorarioFin.setText( " "+ parent.getContext().getString(R.string.a_hasta)  +" "+ hora);
 
-        if (reserva.isForToday()){
-            llmainl.setBackgroundColor(ContextCompat.getColor(parent.getContext(),R.color.fondo_reservas_dia));
+        if (reserva.isForToday()) {
+            llmainl.setBackgroundColor(ContextCompat.getColor(parent.getContext(), R.color.fondo_reservas_dia));
+        }else{
+            llmainl.setBackgroundResource(0);
+        }
+
 //            final RippleDrawable ripple = (RippleDrawable) llmainl.getBackground();
 //            llmainl.setOnTouchListener(new View.OnTouchListener() {
 //
@@ -160,9 +165,9 @@ public class ReservaAdapter extends BaseAdapter {
 //                }
 //
 //            });
-        }
 
-        return view;
+
+        return convertView;
     }
 
 
