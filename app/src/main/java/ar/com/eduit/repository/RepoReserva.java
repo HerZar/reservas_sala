@@ -160,4 +160,41 @@ public class RepoReserva {
 
         return respuesta;
     }
+
+    public List<Reserva> getReservasDelDiaCorrienteYFijos(Calendar current) throws Exception {
+        current.set(Calendar.HOUR_OF_DAY, 0);
+        current.set(Calendar.MINUTE, 0);
+        current.set(Calendar.SECOND, 0);
+        current.set(Calendar.MILLISECOND, 0);
+        Calendar next = (Calendar) current.clone();
+        next.add(Calendar.DATE,1);
+        next.add(Calendar.SECOND,-1);
+        QueryBuilder<Reserva,Long> qb= dao.queryBuilder();
+        qb.orderBy("inicio",true);
+        qb.orderBy("fijo", false);
+        qb.where().between("inicio",current.getTime(),next.getTime()).
+                or().eq("fijo",true);
+        return qb.query();
+
+    }
+
+    public List<Reserva> getReservasDelDiaCorrienteYFijosFiltrado(Calendar current, long oDaId) throws Exception {
+        current.set(Calendar.HOUR_OF_DAY, 0);
+        current.set(Calendar.MINUTE, 0);
+        current.set(Calendar.SECOND, 0);
+        current.set(Calendar.MILLISECOND, 0);
+        Calendar next = (Calendar) current.clone();
+        next.add(Calendar.DATE,1);
+        next.add(Calendar.SECOND,-1);
+        QueryBuilder<Reserva,Long> qb= dao.queryBuilder();
+        qb.orderBy("inicio",true);
+        qb.orderBy("fijo", false);
+        Where<Reserva, Long> w = qb.where();
+        w.and(w.eq("odalquilerID", oDaId),
+                w.or(w.between("inicio",current.getTime(),next.getTime()),
+                w.eq("fijo",true))
+        );
+        return qb.query();
+
+    }
 }

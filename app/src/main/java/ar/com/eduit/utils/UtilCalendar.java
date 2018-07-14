@@ -117,4 +117,8 @@ public class UtilCalendar {
 
         return esteDia.compareTo(elOtro);
     }
+
+    public static boolean sonDelMismoDiaDeLaSemana(Calendar a, Calendar b){
+        return (a.get(Calendar.DAY_OF_WEEK) == b.get(Calendar.DAY_OF_WEEK));
+    }
 }

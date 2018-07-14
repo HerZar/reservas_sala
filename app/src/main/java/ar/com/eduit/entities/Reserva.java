@@ -8,6 +8,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import ar.com.eduit.utils.UtilCalendar;
 
@@ -93,18 +94,17 @@ public class Reserva implements Comparable<Reserva> {
     }
 
     /**
-     *  este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor,
-     *  2 si es el mismo objeto, 3 si no pertenese al mismo objeto de alquiler.
-     * */
+     * este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor,
+     * 2 si es el mismo objeto, 3 si no pertenese al mismo objeto de alquiler.
+     */
     @Override
     public int compareTo(@NonNull Reserva o) {
         int retorno = 0;
 
         // compruebo si pertenece al mismo objeto de alquiler.
-        if (this.getOdalquilerID() != o.getOdalquilerID()){
+        if (this.getOdalquilerID() != o.getOdalquilerID()) {
             retorno = 3;
-        }
-        else {
+        } else {
             //Compruebo si el objeto es si mismo.
             if (this.getId() == o.getId()) {
                 retorno = 2;
@@ -150,17 +150,68 @@ public class Reserva implements Comparable<Reserva> {
     }
 
     /**
-     *  este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor,
-     *  2 si es el mismo objeto, 3 si no pertenece al mismo objeto de alquiler.
-     * */
+     * este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor,
+     * 2 si es el mismo objeto, 3 si no pertenese al mismo objeto de alquiler.
+     */
+
+    public int compareToIgnoringODalquiler(@NonNull Reserva o) {
+        int retorno = 0;
+
+        //Compruebo si el objeto es si mismo.
+        if (this.getId() == o.getId()) {
+            retorno = 2;
+        } else {
+            //Compruebo si ninguna de las reservas es fija coparo unicamente las fechas
+            if (!this.isFijo() && !o.isFijo()) {
+                if (this.inicio.compareTo(o.fin) >= 0) {
+
+                    retorno = 1;
+                } else {
+                    if (this.fin.compareTo(o.inicio) <= 0) {
+                        retorno = -1;
+                    } else {
+                        retorno = 0;
+                    }
+                }
+            } else {
+                //si alguna de las dos respervas es fija, comparo dia de la semana y hora.
+                //Compruebo dia
+                if (this.getInicio().get(Calendar.DAY_OF_WEEK) == o.getInicio().get(Calendar.DAY_OF_WEEK)) {
+                    //is el dia es el mismo comparo horas.
+                    if (UtilCalendar.compareHourTo(this.getInicio(), o.getFin()) >= 0) {
+                        retorno = 1;
+                    } else {
+                        //if (this.fin.compareTo(o.inicio) <= 0) {
+                        if (UtilCalendar.compareHourTo(this.getFin(), o.getInicio()) <= 0) {
+                            retorno = -1;
+                        } else {
+                            retorno = 0;
+                        }
+                    }
+                } else {
+                    if (this.getInicio().get(Calendar.DAY_OF_WEEK) < o.getInicio().get(Calendar.DAY_OF_WEEK)) {
+                        retorno = -1;
+                    } else {
+                        retorno = 1;
+                    }
+                }
+            }
+        }
+
+        return retorno;
+    }
+
+    /**
+     * este metodo devuelve -1 si es menor, 0 si es superpuesto, 1 si es mayor,
+     * 2 si es el mismo objeto, 3 si no pertenece al mismo objeto de alquiler.
+     */
     @SuppressLint("WrongConstant")
     public int compareDayTo(Reserva o) {
         int respuesta = 0;
         // compruebo si pertenece al mismo objeto de alquiler.
-        if (this.getOdalquilerID() != o.getOdalquilerID()){
+        if (this.getOdalquilerID() != o.getOdalquilerID()) {
             respuesta = 3;
-        }
-        else {
+        } else {
             //Compruebo si el objeto es si mismo.
             if (this.getId() == o.getId()) {
                 respuesta = 2;
@@ -189,24 +240,45 @@ public class Reserva implements Comparable<Reserva> {
     }
 
 
-    public boolean isForToday(){
+    public boolean isForToday() {
 
         boolean isToday = false;
         Calendar today = Calendar.getInstance();
 
-        if (this.isFijo()){
+        if (this.isFijo()) {
             if ((this.getInicio().get(Calendar.DAY_OF_WEEK) ==
                     today.get(Calendar.DAY_OF_WEEK)) &&
-                    (UtilCalendar.compareDateTo(this.getInicio(),today) <= 0)){
-                isToday=true;
+                    (UtilCalendar.compareDateTo(this.getInicio(), today) <= 0)) {
+                isToday = true;
             }
-        }else{
-            if (UtilCalendar.compareDateTo(this.getInicio(),today) == 0){
+        } else {
+            if (UtilCalendar.compareDateTo(this.getInicio(), today) == 0) {
                 isToday = true;
             }
         }
 
         return isToday;
+    }
+
+
+    public boolean estaSuperpuesta(List<Reserva> listRes) {
+        for (Reserva item : listRes) {
+            //si es si mismo no esta superpuesto
+            if (this.getId() == item.getId()) {
+                return false;
+            } else {
+                if (this.getInicio().compareTo(item.getFin()) >= 0) {
+                    return false;
+                } else {
+                    if (this.getFin().compareTo(item.getInicio()) <= 0) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

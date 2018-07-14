@@ -7,7 +7,7 @@
     <string name="label_reservas">Reservations</string>
     <string name="label_historico_reservas">Historic Reservations </string>
     <string name="label_nueva_reserva">New Reservation</string>
-    <string name="label_administracion">Administration</string>	
+    <string name="label_administracion">Administration</string>
     <string name="action_settings">Settings</string>
     <string name="agenda">agenda</string>
     <string name="calendario">Calendar</string>
@@ -35,11 +35,11 @@
     <string name="a_partir_del">from</string>
     <string name="de_desde">from</string>
     <string name="a_hasta">to</string>
-	<string name="todos">All</string>
+    <string name="todos">All</string>
     <string name="seleccionar_objeto_de_alquiler">Select the object to rent</string>
     <string name="Historicos_borrados">Historic records has been deleted.</string>
-	<string name="la_reserva_ha_sido_eliminada">The reservation has been deleted.</string>
-    <string name="objeto_de_alquiler_borrado">The object to rent has been deleted.</string>    
+    <string name="la_reserva_ha_sido_eliminada">The reservation has been deleted.</string>
+    <string name="objeto_de_alquiler_borrado">The object to rent has been deleted.</string>
     <string name="error_borrar_historicos">Error deleting historic records.</string>
     <string name="validacion_horas_invertidas">The starting hour couldn\'t be grated than ending hour.</string>
     <string name="validacion_reservas_superpuestas">The reservation is overlaid with another saved reservation.</string>
@@ -47,7 +47,7 @@
     <string name="validacion_fecha_pasada">It is not possible to book with a date before the current date.</string>
     <string name="error_carga_vistas_reserva">Error charging the reservation.</string>
     <string name="error_al_borrar_el_registro">Error deleted the record</string>
-    <string name="objeto_de_alquiler_con_reservas">The object to rent have reservations assigned.</string>	
+    <string name="objeto_de_alquiler_con_reservas">The object to rent have reservations assigned.</string>
     <string name="validacion_campos_vacios">the object to rent, fields Name, date, starting hour, ending hour are mandatory.</string>
     <string name="Domingo">Sunday</string>
     <string name="Lunes">Monday</string>
@@ -57,13 +57,17 @@
     <string name="Viernes">Friday</string>
     <string name="Sabado">Saturday</string>
     <string name="opciones">Settings</string>
-	<string name="agregar_odalquiler">Add Object to rent</string>
+    <string name="agregar_odalquiler">Add Object to rent</string>
     <string name="no_se_encuentran_objetos_de_alquiler">There are no objects to rent.</string>
     <string name="no_se_encuentran_objetos_de_alquiler_init">There are no objects to rent.Please insert an object to rent.</string>
     <string name="podras_editar_en">Is possible to edit and create new objects to rent on administrations menu.</string>
     <string name="que_deseas_alquilar">What do you wish to rent?</string>
     <string name="aceptar">OK</string>
     <string name="Reserva">Rent:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="exampleHour">XXhs</string>
 </resources>
 
 
