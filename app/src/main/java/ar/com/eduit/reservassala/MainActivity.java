@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity{
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
         //-----------------------------------------------
 
 //        lwReservas = (ListView) findViewById(R.id.lvListaReservas);
@@ -187,6 +188,7 @@ public class MainActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 */
+        getSupportFragmentManager().beginTransaction().replace(R.id.flshowreservas,AgendaViewFragment.newInstance()).commit();
         super.onResume();
     }
 
@@ -226,100 +228,19 @@ public class MainActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-//    private void resumeList(Context context) throws Exception {
-//
-//        ODeAlquiler oda = (ODeAlquiler) psODeAlquiler.getSelectedItem();
-//        listRes=null;
-//        if (oda.getId()>0){
-//            listRes = RepoReserva.getInstance(context)
-//                    .getReservasOrdenadoPosterioresFiltrado(oda.getId());
-//        }
-//        else {
-//            listRes = RepoReserva.getInstance(context)
-//                    .getReservasOrdenadoPosteriores();
-//        }
-//
-//        resAdapter.setReservas(listRes);
-//        resAdapter.notifyDataSetChanged();
-//        if (lwReservas.getAdapter().getCount() > 0) {
-//            tvEmptyMesage.setVisibility(View.GONE);
-//        }else {
-//            tvEmptyMesage.setVisibility(View.VISIBLE);
-//        }
-//    }
-//
-//    private void resumeAlquileres(Context con) throws Exception {
-//        lOdeAlquiler = RepoODAlquiler.getInstance(con).getAllODeAlquilers();
-//        if (lOdeAlquiler.size() !=1) {
-//            lOdeAlquiler.add(new ODeAlquiler(getApplicationContext().getResources().getString(R.string.todos)));
-//        }
-//
-//        odaAdapter.setAlquileres(lOdeAlquiler);
-//        psODeAlquiler.setPopupBackgroundResource(R.color.fondo_aplicacion);
-//        // Apply the adapter to the spinner
-//        //psODeAlquiler.setAdapter(odaAdapter);
-//        odaAdapter.notifyDataSetChanged();
-//        psODeAlquiler.setSelection(lOdeAlquiler.size() - 1);
-//    }
-//
-//    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//        try {
-//            resumeList(getApplicationContext());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> parent) {
-//
-//    }
-//
-//    private void callAgregarDialog( long id){
-//        ODeAlquiler oda = null;
-//        try {
-//            oda = RepoODAlquiler.getInstance(getApplication()).getODeAlquilerById(id);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        Button btnAceptar = (Button) dialogoAgregar.findViewById(R.id.btnAceptar);
-//        final EditText etOdAlquiler = (EditText) dialogoAgregar.findViewById(R.id.etAlquiler);
-//        if (oda != null){
-//            etOdAlquiler.setText(oda.getName());
-//        }else{
-//            etOdAlquiler.setText("");
-//        }
-//        final ODeAlquiler finalOda = oda;
-//        btnAceptar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    if (!etOdAlquiler.getText().toString().isEmpty()) {
-//                        if(finalOda !=null) {
-//                            finalOda.setName(etOdAlquiler.getText().toString());
-//                            RepoODAlquiler.getInstance(MainActivity.this).update(finalOda);
-//
-//                        }else{
-//                            RepoODAlquiler.getInstance(MainActivity.this).save(new ODeAlquiler(etOdAlquiler.getText().toString()));
-//                        }
-//                        resumeList(MainActivity.this);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    resumeAlquileres(MainActivity.this);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                dialogoAgregar.dismiss();
-//            }
-//        });
-//        dialogoAgregar.show();
-//
-//    }
+    public void showSemana(View view) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.flshowreservas,WeekAgendaViewFragment.newInstance()).commit();
+    }
 
+    public void showDia(View view) {
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.flshowreservas,DayAgendaViewFragment.newInstance()).commit();
+
+    }
+
+    public void showAgenda(View view) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.flshowreservas,
+               AgendaViewFragment.newInstance() ).commit();
+    }
 
 }

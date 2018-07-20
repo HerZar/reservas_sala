@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,9 +26,9 @@ import ar.com.eduit.utils.AlquilerAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DayAgendaViewFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+public class WeekAgendaViewFragment extends Fragment  implements AdapterView.OnItemSelectedListener{
 
-    private static final int AMOUNT_OF_DAYS_DROWED = 1;
+    private static final int AMOUNT_OF_DAYS_DROWED = 7;
     //Elementos de lista de Objetos de Alquiler
     private List<ODeAlquiler> lOdeAlquiler;
     private AlquilerAdapter odaAdapter;
@@ -47,38 +46,29 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
     //---------------------------------
     //--Objetos del calendario.
     private ViewGroup clagenda;
-    private RelativeLayout reservaDeCalendario;
-
-
-
-    //   private int widthX;
-    private List<View> viewListadoReservas;
-
-
-
-    public DayAgendaViewFragment() {
+    public WeekAgendaViewFragment() {
         // Required empty public constructor
     }
 
-    public static DayAgendaViewFragment newInstance(){
-        DayAgendaViewFragment fragment = new DayAgendaViewFragment();
+    public static WeekAgendaViewFragment newInstance(){
+        WeekAgendaViewFragment fragment = new WeekAgendaViewFragment();
         return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewListadoReservas=new ArrayList<>();
         currentDay = Calendar.getInstance();
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_day_agenda_view, container, false);
+        return inflater.inflate(R.layout.fragment_week_agenda_view, container, false);
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -108,7 +98,7 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
 
     private String cargarTextoFecha() {
 
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
 
         return format.format(currentDay.getTime());
     }
@@ -118,10 +108,9 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
 
-                currentDay.add(Calendar.DATE,1);
+                currentDay.add(Calendar.DATE,7);
                 tvCurrentDay.setText(cargarTextoFecha());
-                getChildFragmentManager().beginTransaction().replace(R.id.fldrawcalendarevents,
-                        DrawCalendarEventsFragment.newInstance(AMOUNT_OF_DAYS_DROWED,currentDay,(ODeAlquiler) psODeAlquiler.getSelectedItem())).commit();
+                callDayFragments();
 
             }
         };
@@ -133,11 +122,9 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
 
-                currentDay.add(Calendar.DATE,-1);
+                currentDay.add(Calendar.DATE,-7);
                 tvCurrentDay.setText(cargarTextoFecha());
-                getChildFragmentManager().beginTransaction().replace(R.id.fldrawcalendarevents,
-                        DrawCalendarEventsFragment.newInstance(AMOUNT_OF_DAYS_DROWED,currentDay,(ODeAlquiler) psODeAlquiler.getSelectedItem())).commit();
-
+                callDayFragments();
             }
         } ;
     }
@@ -152,13 +139,80 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
             e.printStackTrace();
         }
 
-        getChildFragmentManager().beginTransaction().replace(R.id.fldrawcalendarevents,
-                DrawCalendarEventsFragment.newInstance(AMOUNT_OF_DAYS_DROWED,currentDay,(ODeAlquiler) psODeAlquiler.getSelectedItem())).commit();
+        callDayFragments();
 
         super.onResume();
 
     }
 
+    private void callDayFragments(){
+
+        int dateId= 0;
+        int drawId = 0;
+
+
+        Calendar day = getLastSunday();
+
+        for (int i=0 ; i<7; i++){
+
+            switch (day.get(Calendar.DAY_OF_WEEK)){
+                case 1 : dateId = R.id.tvDate1;
+                    drawId = R.id.fldrawcalendareventsday1;
+                    break;
+                case 2 : dateId = R.id.tvDate2;
+                    drawId = R.id.fldrawcalendareventsday2;
+                    break;
+                case 3 : dateId = R.id.tvDate3;
+                    drawId = R.id.fldrawcalendareventsday3;
+                    break;
+                case 4 : dateId = R.id.tvDate4;
+                    drawId = R.id.fldrawcalendareventsday4;
+                    break;
+                case 5 : dateId = R.id.tvDate5;
+                    drawId = R.id.fldrawcalendareventsday5;
+                    break;
+                case 6 : dateId = R.id.tvDate6;
+                    drawId = R.id.fldrawcalendareventsday6;
+                    break;
+                case 7 : dateId = R.id.tvDate7;
+                    drawId = R.id.fldrawcalendareventsday7;
+                    break;
+            }
+
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM");
+            TextView tvDate = (TextView) getView().findViewById(dateId);
+
+            tvDate.setText(format.format(day.getTime()));
+            getChildFragmentManager().beginTransaction().replace(drawId,
+                    DrawCalendarEventsFragment.newInstance(AMOUNT_OF_DAYS_DROWED,(Calendar) day.clone(),(ODeAlquiler) psODeAlquiler.getSelectedItem())).commit();
+
+
+            day.add(Calendar.DATE, 1);
+        }
+
+    }
+
+    private Calendar getLastSunday(){
+
+        Calendar aux = (Calendar) currentDay.clone();
+        switch (currentDay.get(Calendar.DAY_OF_WEEK)){
+            case 1 : return aux;
+            case 2 : aux.add(Calendar.DATE,-1);
+                return aux;
+            case 3 : aux.add(Calendar.DATE,-2);
+                return aux;
+            case 4 : aux.add(Calendar.DATE,-3);
+                return aux;
+            case 5 : aux.add(Calendar.DATE,-4);
+                return aux;
+            case 6 : aux.add(Calendar.DATE,-5);
+                return aux;
+            case 7 : aux.add(Calendar.DATE,-6);
+                return aux;
+
+        }
+        return aux;
+    }
 
     private void cargarHorarios(View view) {
 
@@ -170,6 +224,7 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
         }
 
     }
+
     private void loadIOdeAlquilerSpinner(Context context) throws Exception {
         lOdeAlquiler = RepoODAlquiler.getInstance(context).getAllODeAlquilers();
         if (lOdeAlquiler.size() !=1) {
@@ -181,8 +236,6 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
         odaAdapter.notifyDataSetChanged();
         psODeAlquiler.setSelection(lOdeAlquiler.size() - 1);
     }
-
-
 
     private int getLayoutHourID(int hour) {
         int respuesta = 0;
@@ -266,7 +319,6 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
         return respuesta;
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         try {
@@ -274,8 +326,7 @@ public class DayAgendaViewFragment extends Fragment implements AdapterView.OnIte
             //Luego de seleccionar un Ode alquiler del spinner tengo que revalcular
             // las reservas mostradas en el calendario
             // TO DO
-            getChildFragmentManager().beginTransaction().replace(R.id.fldrawcalendarevents,
-                    DrawCalendarEventsFragment.newInstance(AMOUNT_OF_DAYS_DROWED,currentDay,(ODeAlquiler) psODeAlquiler.getSelectedItem())).commit();
+            callDayFragments();
         } catch (Exception e) {
             e.printStackTrace();
         }

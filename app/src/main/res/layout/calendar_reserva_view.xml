@@ -2,34 +2,42 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:alpha="1"
     android:background="?android:attr/selectableItemBackground">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#991D5575"
-        android:padding="5dp">
+        android:background="#CC040404">
 
-        <TextView
-            android:id="@+id/tvreservaid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvreservaoda"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ODA"
-            android:textColor="@color/negro"/>
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+            android:background="#991D5575"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-        <TextView
-            android:id="@+id/tvreservanombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nombre"
-            android:textColor="@color/negro"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvreservaid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvreservaoda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ODA"
+                android:textColor="@color/negro" />
+
+            <TextView
+                android:id="@+id/tvreservanombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre"
+                android:textColor="@color/negro" />
+        </LinearLayout>
+    </FrameLayout>
 
 </RelativeLayout>

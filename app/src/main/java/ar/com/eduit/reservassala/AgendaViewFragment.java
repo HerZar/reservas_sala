@@ -4,8 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +107,12 @@ public class AgendaViewFragment extends Fragment implements AdapterView.OnItemSe
     @Override
     public void onResume() {
         try {
+            resumeAlquileres(getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
             resumeList(getContext());
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,11 +176,6 @@ public class AgendaViewFragment extends Fragment implements AdapterView.OnItemSe
 
         }
 
-        try {
-            resumeAlquileres(getContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         super.onResume();
     }

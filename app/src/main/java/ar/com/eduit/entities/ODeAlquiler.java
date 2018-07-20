@@ -4,9 +4,11 @@ package ar.com.eduit.entities;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.io.Serializable;
+
 
 @DatabaseTable(tableName = "Alquileres")
-public class ODeAlquiler  {
+public class ODeAlquiler implements Serializable {
 
     @DatabaseField(generatedId = true)
     private long id;
